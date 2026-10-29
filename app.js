@@ -154,9 +154,17 @@
     try { history.replaceState(null, '', '#p' + (actual + 1)); } catch (x) {}
     if (leer && cfg.narracion) leerEscena();
   }
-  function irPortada() { detener(); $('lector').classList.add('oculto'); $('portada').classList.remove('oculto'); try { history.replaceState(null, '', location.pathname); } catch (x) {} window.scrollTo(0, 0); }
-  function irLector(i) { $('portada').classList.add('oculto'); $('lector').classList.remove('oculto'); mostrar(i, true); window.scrollTo(0, 0); }
-  function siguiente() { if (actual === esc.length - 1) { irPortada(); return; } mostrar(actual + 1, true); window.scrollTo(0, 0); }
+  const VISTAS = ['portada', 'lector', 'fin', 'juegos'];
+  function ir(id) {
+    detener();
+    VISTAS.forEach(v => $(v).classList.toggle('oculto', v !== id));
+    if (id === 'portada') { try { history.replaceState(null, '', location.pathname); } catch (x) {} }
+    window.scrollTo(0, 0);
+    document.dispatchEvent(new CustomEvent('tatu:vista', { detail: id }));
+  }
+  function irPortada() { ir('portada'); }
+  function irLector(i) { ir('lector'); mostrar(i, true); }
+  function siguiente() { if (actual === esc.length - 1) { ir('fin'); return; } mostrar(actual + 1, true); window.scrollTo(0, 0); }
   function anterior() { if (actual > 0) { mostrar(actual - 1, true); window.scrollTo(0, 0); } }
 
   /* ---------- Pictograma ampliado (no cambia la escena) ---------- */
@@ -174,6 +182,15 @@
   /* ---------- Versión imprimible (todo local, sin conexión) ---------- */
   function construirImprimible(modo) {
     modo = modo || 'completo';
+    if (modo === 'diploma') {
+      $('imprimible').innerHTML = `<div class="p-pag p-diploma"><div class="dip-marco">
+        <div class="dip-sub">E.P.E.E N° 3</div><h1>DIPLOMA DE LECTOR</h1>
+        <img class="p-img" src="${esc[7].img}" alt="">
+        <p class="dip-texto">PARTICIPÉ EN LAS AVENTURAS DE<br><b>EL TATÚ ENAMORADO</b></p>
+        <div class="dip-nombre"><div class="dip-linea"></div><span>NOMBRE DEL ESTUDIANTE</span></div>
+        <div class="p-autoria">CREADO POR BELÉN DELLAMEA · E.P.E.E N° 3</div></div></div>`;
+      return;
+    }
     const aut = '<div class="p-autoria">CREADO POR BELÉN DELLAMEA · E.P.E.E N° 3</div>';
     const cred = '<div class="p-credito">PICTOGRAMAS: ARASAAC (arasaac.org) — AUTOR: SERGIO PALAO — ORIGEN: ARASAAC, GOBIERNO DE ARAGÓN — LICENCIA CC BY-NC-SA 4.0</div>';
     let h = '';
@@ -213,6 +230,9 @@
     cargarCfg(); aplicarCfg();
     $('portadaImg').src = CUENTO.portadaImg;
     $('btnComenzar').onclick = () => irLector(0);
+    document.querySelectorAll('[data-ir]').forEach(b => b.onclick = () => ir(b.dataset.ir));
+    $('btnVolverLeer').onclick = () => irLector(0);
+    $('btnEscucharFin').onclick = () => { detener(); hablar('¡Terminamos el cuento! ¿Jugamos con el tatú?'); };
     $('btnPortada').onclick = irPortada;
     $('btnAnterior').onclick = anterior;
     $('btnSiguiente').onclick = siguiente;
@@ -242,6 +262,8 @@
     });
     const m = /^#p(\d)$/.exec(location.hash);
     if (m && +m[1] >= 1 && +m[1] <= esc.length) irLector(+m[1] - 1);
+    else if (location.hash === '#juegos') ir('juegos');
   }
+  window.Tatu = { hablar, detener, ir, irLector, imprimir, cfg: () => cfg };
   iniciar();
 })();

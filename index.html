@@ -6,6 +6,7 @@
 <title>EL TATÚ ENAMORADO — Pictocuento accesible</title>
 <meta name="description" content="Un cuento para leer, mirar y escuchar. Lectura accesible con apoyos visuales y pictogramas ARASAAC.">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="juegos.css">
 </head>
 <body>
 <a class="skip" href="#contenido">IR AL CONTENIDO</a>
@@ -20,6 +21,7 @@
       <p class="lema">LECTURA ACCESIBLE CON APOYOS VISUALES Y PICTOGRAMAS</p>
       <p class="autoria">CREADO POR BELÉN DELLAMEA · E.P.E.E N° 3</p>
       <button id="btnComenzar" class="btn btn-grande">COMENZAR A LEER</button>
+      <button class="btn btn-juegos" data-ir="juegos">🎮 JUGAMOS CON EL TATÚ</button>
       <button class="btn btn-sec" data-imprimir="completo">IMPRIMIR CUENTO</button>
       <button class="btn btn-sec" data-imprimir="pegar">IMPRIMIR PARA PEGAR PICTOGRAMAS</button>
       <button class="btn btn-sec" data-imprimir="recortar">IMPRIMIR PICTOGRAMAS PARA RECORTAR</button>
@@ -70,6 +72,22 @@
     </nav>
   </section>
 
+
+  <!-- FIN DEL CUENTO -->
+  <section id="fin" class="vista oculto" aria-labelledby="tituloFin">
+    <div class="portada-card">
+      <h2 id="tituloFin" class="fin-titulo">¡TERMINAMOS EL CUENTO!</h2>
+      <div class="img-marco"><img src="img/escenas/08_Un_final_feliz.jpg" alt="El tatú y la iguana, felices"></div>
+      <p class="subtitulo">¿JUGAMOS CON EL TATÚ?</p>
+      <button class="btn btn-grande" data-ir="juegos">JUGAR</button>
+      <button id="btnVolverLeer" class="btn btn-sec">VOLVER A LEER</button>
+      <button id="btnEscucharFin" class="btn btn-azul">▶ ESCUCHAR</button>
+    </div>
+  </section>
+
+  <!-- JUEGOS (se completa con juegos.js) -->
+  <section id="juegos" class="vista oculto" aria-label="Jugamos con el tatú"></section>
+
   <footer class="pie">
     <div class="autoria">CREADO POR BELÉN DELLAMEA · E.P.E.E N° 3</div>
     PICTOGRAMAS: <a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC (arasaac.org)</a> — AUTOR: SERGIO PALAO — ORIGEN: ARASAAC, GOBIERNO DE ARAGÓN — LICENCIA <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>.
@@ -94,5 +112,6 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script src="juegos.js"></script>
 </body>
 </html>
